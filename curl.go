@@ -64,14 +64,14 @@ func (i *impl[IN, OUT]) SetProxy(proxyUrl string) Service[IN, OUT] {
 }
 
 func (i *impl[IN, OUT]) Get() (*OUT, error) {
-	return i.do(http.MethodGet)
+	return i.do(MethodGet)
 }
 
 func (i *impl[IN, OUT]) Post() (*OUT, error) {
-	return i.do(http.MethodPost)
+	return i.do(MethodPost)
 }
 
-func (i *impl[IN, OUT]) do(method string) (*OUT, error) {
+func (i *impl[IN, OUT]) do(method Method) (*OUT, error) {
 	var out OUT
 	cli := req.C().EnableInsecureSkipVerify()
 	if i.proxy != "" {
@@ -80,12 +80,12 @@ func (i *impl[IN, OUT]) do(method string) (*OUT, error) {
 		cli.SetProxy(proxy)
 	}
 	var r *req.Request
-	if method == http.MethodGet {
+	if method == MethodGet {
 		r = cli.Get()
 	} else {
 		r = cli.Post()
 	}
-	if i.contentType != "" {
+	if i.contentType.String() != "" {
 		r.SetContentType(i.contentType.String())
 	}
 	if i.headers != nil {
