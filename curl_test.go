@@ -6,7 +6,7 @@ import (
 )
 
 func TestPostJson(t *testing.T) {
-	out, err := PostJson[any, any]("https://example.com/data", nil, nil)
+	out, err := Define[any, any]().Get()
 	if err != nil {
 		return
 	}
